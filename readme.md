@@ -1,21 +1,21 @@
-![!ethereumNode](./ethereumnode.jpeg)
+![!ethereumNode](./sedge.png)
 
 
 **[English below]**
 
 # ethereum Node em AWS EC2 com Terraform e Ansible
 
-Este projeto implementa um nó ethereum na AWS EC2 usando Terraform para provisionar a infraestrutura e Ansible para configurar o nó.
+Este projeto implementa um nó ethereum validator na AWS EC2 usando Terraform para provisionar a infraestrutura e Ansible para configurar o nó.
 
 ## Estrutura do projeto
 
 ```
-ethereum-node-aws-ec2/
+ethereum-validator/
 │
 ├── ansible/│
 │   ├── ansible.cfg
 │   ├── hosts.ini
-│   └── install_ethereum_validator.yml
+│   └── ethereum_validator.yml
 │
 ├── terraform/
     ├── modules/
@@ -44,8 +44,8 @@ ethereum-node-aws-ec2/
 1. Clone este repositório:
 
    ```
-   git clone https://github.com/ffelipesimoes/ethereum-node-aws-ec2.git
-   cd ethereum-node-aws-ec2/
+   git clone https://github.com/ffelipesimoes/ethereum-validator.git
+   cd ethereum-validator
    ```
 
 2. Configure suas credenciais da AWS usando o AWS CLI:
@@ -89,60 +89,34 @@ ethereum-node-aws-ec2/
    ansible-playbook -i hosts.ini install_ethereum_validator.yml
    ```
 
-Após a execução bem-sucedida do playbook, seu nó ethereum estará em funcionamento no contêiner `ethereumd` na instância EC2 da AWS.
+Após a execução bem-sucedida do playbook, seu nó ethereum estará em funcionamento no contêiner na instância EC2 da AWS.
 
 ## Explicação
 
-Este projeto cria uma instância EC2 na AWS usando o Terraform com as seguintes configurações de segurança:
+Um nó validador Ethereum usando SEDGE e Teku refere-se a uma configuração que utiliza o software SEDGE como um cliente Ethereum de alto desempenho e Teku como um cliente Ethereum 2.0 (Eth2) para validação na rede Beacon Chain.
 
-- Permitir tráfego SSH (porta 22)
-- Permitir tráfego HTTP (porta 80)
-- Permitir tráfego HTTPS (porta 443)
-- Permitir tráfego de saída
-- Permitir tráfego RPC do ethereum (porta 8332)
-- Permitir tráfego P2P do ethereum (porta 8333)
-- Permitir tráfego de notificações de blocos ZMQ (porta 28332)
-- Permitir tráfego de notificações de transações ZMQ (porta 28333)
+SEDGE: SEDGE é uma implementação do cliente Ethereum que foi desenvolvida com foco em alto desempenho e baixo consumo de recursos. Ele é otimizado para a validação de blocos e transações na rede Ethereum. O SEDGE é projetado para ser altamente escalável e eficiente, permitindo que os validadores executem suas funções com eficiência.
 
-O playbook do Ansible configura o nó ethereum executando as seguintes etapas:
+Teku: Teku, por sua vez, é um cliente Ethereum 2.0 desenvolvido pela ConsenSys. Ele é projetado para suportar a Beacon Chain e o mecanismo de consenso de proof-of-stake do Ethereum 2.0. O Teku permite que os validadores participem do Ethereum 2.0 e realizem tarefas de validação, como proposição de blocos, votação e participação no mecanismo de consenso.
 
-- Atualiza os pacotes do sistema
-- Instala o Docker
-- Inicia e habilita o serviço Docker
-- Baixa a imagem `lncm/ethereumd:v25.0`
-- Executa um contêiner usando a imagem `lncm/ethereumd:v25.0`, expondo as portas necessárias e vinculando o volume `ethereum-data`.
-
-
-## Contribuindo
-
-Sinta-se à vontade para contribuir com este projeto abrindo issues ou enviando pull requests.
-
-## Licença
-
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter detalhes.
-
-
-## Melhorias futuras
-
-Subir esse conteiner usando AWS Fargate ou ECS.
+Ao combinar o SEDGE e o Teku, os validadores podem executar tarefas de validação tanto na rede Ethereum 1.0 quanto na rede Ethereum 2.0.
 
 
 **[Português acima]**
 
+# Ethereum Node on AWS EC2 with Terraform and Ansible
 
-# ethereum Node on AWS EC2 with Terraform and Ansible
-
-This project implements a ethereum node on AWS EC2 using Terraform to provision the infrastructure and Ansible to configure the node.
+This project implements an Ethereum validator node on AWS EC2 using Terraform for infrastructure provisioning and Ansible for node configuration.
 
 ## Project Structure
 
 ```
-ethereum-node-aws-ec2/
+ethereum-validator/
 │
 ├── ansible/
 │   ├── ansible.cfg
 │   ├── hosts.ini
-│   └── install_ethereum_validator.yml
+│   └── ethereum_validator.yml
 │
 ├── terraform/
     ├── modules/
@@ -163,25 +137,25 @@ ethereum-node-aws-ec2/
 
 - [Terraform](https://www.terraform.io/downloads.html) (version 0.13 or higher)
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) (version 2.9 or higher)
-- [AWS Account](https://aws.amazon.com/) with correctly configured credentials
-- Existing SSH key on AWS and your local system
+- AWS account with properly configured credentials
+- Existing SSH key pair in AWS and on your local system
 
-## How to use
+## How to Use
 
 1. Clone this repository:
 
    ```
-   git clone https://github.com/ffelipesimoes/ethereum-node-aws-ec2.git
-   cd ethereum-node-aws-ec2/
+   git clone https://github.com/ffelipesimoes/ethereum-validator.git
+   cd ethereum-validator
    ```
 
-2. Configure your AWS credentials using AWS CLI:
+2. Configure your AWS credentials using the AWS CLI:
 
    ```
    aws configure
    ```
 
-3. Edit the `variable.tf` file and update the path of your public key within the `public_key_path` block to the path of the key you use.
+3. Edit the `variable.tf` file and update the `public_key_path` value to the path of your public key.
 
 4. Navigate to the `terraform/` directory and initialize Terraform:
 
@@ -190,19 +164,19 @@ ethereum-node-aws-ec2/
    terraform init
    ```
 
-5. Check the Terraform execution plan and confirm if it is correct:
+5. Verify the Terraform execution plan and confirm that it is correct:
 
    ```
    terraform plan
    ```
 
-6. Apply the Terraform configurations to create the AWS infrastructure:
+6. Apply the Terraform configuration to create the infrastructure on AWS:
 
    ```
    terraform apply
    ```
 
-7. After Terraform finishes, navigate to the `ansible/` directory:
+7. After Terraform completes, navigate to the `ansible/` directory:
 
    ```
    cd ../ansible/
@@ -210,43 +184,20 @@ ethereum-node-aws-ec2/
 
 8. Update the `hosts.ini` file with the public IP of the EC2 instance created by Terraform. You can find the IP in the `terraform/terraform.tfstate` file.
 
-9. Run the Ansible playbook to configure the ethereum node:
+9. Execute the Ansible playbook to configure the Ethereum node:
 
    ```
    ansible-playbook -i hosts.ini install_ethereum_validator.yml
    ```
 
-After the successful execution of the playbook, your ethereum node will be running in the `ethereumd` container on the AWS EC2 instance.
+After the playbook runs successfully, your Ethereum node will be up and running in the Docker container on the AWS EC2 instance.
 
 ## Explanation
 
-This project creates an EC2 instance on AWS using Terraform with the following security configurations:
+An Ethereum validator node using SEDGE and Teku refers to a configuration that utilizes the SEDGE software as a high-performance Ethereum client and Teku as an Ethereum 2.0 (Eth2) client for validation on the Beacon Chain network.
 
-- Allow SSH traffic (port 22)
-- Allow HTTP traffic (port 80)
-- Allow HTTPS traffic (port 443)
-- Allow outbound traffic
-- Allow ethereum RPC traffic (port 8332)
-- Allow ethereum P2P traffic (port 8333)
-- Allow ZMQ block notifications traffic (port 28332)
-- Allow ZMQ transaction notifications traffic (port 28333)
+SEDGE: SEDGE is an Ethereum client implementation that has been developed with a focus on high performance and low resource consumption. It is optimized for block and transaction validation on the Ethereum network. SEDGE is designed to be highly scalable and efficient, enabling validators to perform their functions effectively.
 
-The Ansible playbook configures the ethereum node by performing the following steps:
+Teku: Teku, on the other hand, is an Ethereum 2.0 client developed by ConsenSys. It is designed to support the Beacon Chain and the proof-of-stake consensus mechanism of Ethereum 2.0. Teku allows validators to participate in Ethereum 2.0 and perform validation tasks such as block proposing, voting, and participation in the consensus mechanism.
 
-- Update the system packages
-- Install Docker
-- Start and enable the Docker service
-- Download the `lncm/ethereumd:v25.0` image
-- Run a container using the `lncm/ethereumd:v25.0` image, exposing the necessary ports and binding the `ethereum-data` volume.
-
-## Contributing
-
-Feel free to contribute to this project by opening issues or submitting pull requests.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Future Enhancements
-
-Deploy this container using AWS Fargate or ECS.
+By combining SEDGE and Teku, validators can perform validation tasks on both the Ethereum 1.0 network and the Ethereum 2.0 network.
